@@ -1,0 +1,65 @@
+﻿@using Core.Utilities
+@using DataLayer.Entity.Vote
+@using WebFramework.Message
+@{
+    ViewData["Title"] = "Home Page";
+    var votes = ViewData["Votes"] as List<Vote>;
+    var messages = ViewData["Messages"] as List<MessagesForView>;
+}
+
+<div class="text-center">
+    @if (messages != null)
+    {
+        foreach (var message in messages)
+        {
+            <div class="alert alert-@message.MessageStatus.ToString()" role="alert">
+                @message.Message
+            </div>
+        }
+    }
+    <table class="table table-striped">
+        @if (votes == null)
+        {
+            <p>رای گیری وجود ندارد</p>
+        }
+        else
+        {
+            <thead>
+                <tr>
+                    <th scope="col">ردیف</th>
+                    <th scope="col">عنوان</th>
+                    <th scope="col">زمان انقضاء</th>
+                    <th scope="col">فعال</th>
+                    <th scope="col">فعالیت ها</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var (item, index) in votes.WithIndex())
+                {
+                    <tr>
+                        <th scope="row">@(index + 1)</th>
+                        <td>@item.VoteName</td>
+                        <td>@item.FinishTime</td>
+                        <td>@item.Active</td>
+                        <td>
+                            <a asp-area="Account" asp-controller="Home" asp-action="Vote" asp-route-id="@item.VoteId" type="button" class="btn btn-outline-primary">شرکت در رای گیری</a>
+                            <a asp-action="ShowResponse" asp-route-id="@item.VoteId" type="button" class="btn btn-outline-primary">مشاهده نتایج</a>
+                            @if (!item.Active)
+                            {
+                        <a asp-action="ActiveDeActive" asp-route-id="@item.VoteId" type="button" class="btn btn-outline-success">فعال کردن</a> }
+                                            else
+                                            {
+                        <a asp-action="ActiveDeActive" asp-route-id="@item.VoteId" type="button" class="btn btn-outline-danger">غیر فعال کردن</a>}
+                            <a asp-action="EditVoteTime" asp-route-id="@item.VoteId" type="button" class="btn btn-outline-info"> ویرایش زمان</a>
+                            <a asp-action="DeleteVote" asp-route-id="@item.VoteId" type="button" class="btn btn-outline-danger"> حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+        <a asp-controller="Home" asp-action="AddVote" type="button" class="btn btn-outline-primary">اضافه کردن رای گیری</a>
+        <a asp-controller="Users" asp-action="Index" type="button" class="btn btn-outline-primary">مدیریت کاربران</a>
+        <a asp-controller="Groups" asp-action="Index" type="button" class="btn btn-outline-primary">مدیریت گروه‌ها</a>
+    </table>
+</div>

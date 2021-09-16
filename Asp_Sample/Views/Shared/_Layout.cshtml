@@ -1,0 +1,84 @@
+﻿@using DataLayer.Entity.User
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="~/organlogo.png">
+    <link rel="icon" href="~/organlogo.png" type="image/x-icon">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    @*<title>@ViewData["Title"]</title>*@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-rtl.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css"/>
+    @RenderSection("Styles",false)
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav flex-grow-1 ml-auto">
+                        <img src="~/organlogo.png"/>
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("Owner"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">پنل مدیریت</a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">خانه</a>
+                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                    <li class="nav-item ml-auto">
+                        <a class="nav-link text-dark" asp-area="Account" asp-controller="Home" asp-action="Index">ناحیه کاربری</a>
+                        <form asp-area="Account" asp-controller="Home" asp-action="LogOut" method="post">
+                            <button type="submit" class="btn nav-link text-dark">خروج</button>
+                        </form>
+                    </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item ml-auto">
+                                <a class="nav-link text-dark" asp-area="Account" asp-controller="Home" asp-action="Login">ورود</a>
+                                <a class="nav-link text-dark" asp-area="Account" asp-controller="Home" asp-action="Register">ثبت نام</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+</header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020  - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/@@popperjs/core@2/dist/umd/popper.js"></script>
+
+    <script src="~/app.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

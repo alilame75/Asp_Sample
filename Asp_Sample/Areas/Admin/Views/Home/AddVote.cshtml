@@ -1,0 +1,131 @@
+﻿@using Services.DTOs.Vote
+@model Services.DTOs.Vote.VoteDto
+
+@{
+    ViewData["Title"] = "اضافه کردن رای گیری";
+    var groups = ViewData["Groups"] as List<GroupSelectForVote>;
+}
+
+
+<h4>اضافه کردن رای گیری جدید</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddVote" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Vote.VoteName" class="control-label">نام</label>
+                <input onchange="myChangeFunction(this)" asp-for="Vote.VoteName" class="form-control" />
+                <span asp-validation-for="Vote.VoteName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vote.VoteDescription" class="control-label">توضیحات</label>
+                <input id="des" asp-for="Vote.VoteDescription" class="form-control" />
+                <span asp-validation-for="Vote.VoteDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vote.Priority" class="control-label">اولویت</label>
+                <input asp-for="Vote.Priority" class="form-control" />
+                <span asp-validation-for="Vote.Priority" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="Vote.Question" class="control-label">پرسش</label>
+                <input id="qus" asp-for="Vote.Question" class="form-control" />
+                <span asp-validation-for="Vote.Question" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Vote.FinishTime" class="control-label"></label>
+                <input value="@(DateTime.Now.ToString("yyyy-MM-ddT14:00"))" asp-for="Vote.FinishTime" class="form-control" />
+                <span asp-validation-for="Vote.FinishTime" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Vote.Active" value="true" checked /> فعال
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="button" name="add" value="+Add" id="addrows" />
+                <table id="mytable" style="overflow-x: auto;">
+                    <tr>
+                        <th>پاسخ</th>
+                        <th>توضیحات پاسخ</th>
+                    </tr>
+                    <tr>
+                        <td><input value="موافق" asp-for="VoteAnswers[0].Option" /></td>
+                        <td><input asp-for="VoteAnswers[0].OptionDescription" /></td>
+                    </tr>
+                    <tr>
+                        <td><input value="مخالف" asp-for="VoteAnswers[1].Option" /></td>
+                        <td><input asp-for="VoteAnswers[1].OptionDescription" /></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Vote.UserHowManyCanVote" class="control-label">هرشخص به چه تعداد میتواند رای دهد ؟</label>
+                <input type="number" asp-for="Vote.UserHowManyCanVote" value="1" class="form-control" />
+                <span asp-validation-for="Vote.UserHowManyCanVote" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <label asp-for="Groups" class="control-label">گروه ها برای این پرسش</label>
+                @for (int i = 0; i < groups?.Count; i++)
+                {
+        <div class="">
+            <label class="form-check-label" asp-for="Groups[i].GroupTitle">
+                <input class="form-check-input" type="checkbox" asp-for="Groups[i].Selected" />
+                <input type="hidden" asp-for="Groups[i].GroupId" value="@groups[i].GroupId" />
+                @groups[i].GroupTitle
+            </label>
+        </div>}
+                <span asp-validation-for="Groups" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" type="button" class="btn btn-outline-danger">باز گشت به صفحه قبل </a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function myChangeFunction(input1) {
+            var input2 = document.getElementById('des');
+            input2.value = input1.value;
+            var input3 = document.getElementById('qus');
+            input3.value = input1.value;
+        }
+
+        j = 1;
+        $("#addrows").click(function () {
+            $("#mytable").each(function () {
+                var tds = '<tr>';
+                j++;
+                jQuery.each($('tr:last td', this),
+                    function () {
+                        tds += '<td>' + $(this).html() + '</td>';
+                    });
+                tds =
+                    `<tr>
+                                        <td><input type="text" id="VoteAnswers_${j}__Option" name="VoteAnswers[${j}].Option" value=""></td>
+                                        <td><input type="text" id="VoteAnswers_${j}__OptionDescription" name="VoteAnswers[${j}].OptionDescription" value=""></td>
+                                    </tr>`;
+                if ($('tbody', this).length > 0) {
+                    $('tbody', this).append(tds);
+                } else {
+                    $(this).append(tds);
+                }
+            });
+        });
+
+        document.getElementById("fT").value = "2020-8-15T14:00";
+
+
+    </script>
+}

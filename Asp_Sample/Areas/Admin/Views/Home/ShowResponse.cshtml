@@ -1,0 +1,81 @@
+﻿@using Services.DTOs.Vote
+@using System.Collections
+@using Asp_Sample.Areas.Admin.Controllers
+
+@{
+    ViewData["Title"] = "ShowResponse";
+    var res = ViewData["Response"] as List<VoteCountDto>;
+    var userVoted = ViewData["UserVoted"] as List<HomeController.UserVoted>;
+}
+
+<h1>نتایج</h1>
+
+<div class="text-center">
+    <div>
+        <a asp-action="Index" type="button" class="btn btn-outline-danger"> بازگشت به لیست</a>
+    </div>
+    <table class="table table-striped">
+        @if (res != null)
+        {
+            <thead>
+                <tr>
+                    <th scope="col">گزینه</th>
+                    <th scope="col">تعداد</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in res)
+                {
+                    <tr>
+                        <td>@item.Answer</td>
+                        <td>@item.Count</td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            <p>فعلا کسی رای نداده است</p>
+        }
+    </table>
+
+    <br />
+
+    <span>کاربرانی که رای خود را ثبت کرده اند.</span>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>نام کاربری</th>
+                <th>تعداد رای</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (userVoted != null)
+            {
+                @foreach (var item in userVoted)
+                {
+                    <tr>
+                        <td>@item.Username</td>
+                        <td>@item.Count</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+            $(document).ready(function () {
+                setTimeout(function(){
+                  location.replace( location.pathname );
+
+                }, 5000);
+            });
+    </script>
+}
+

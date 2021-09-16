@@ -1,0 +1,42 @@
+﻿@model IEnumerable<DataLayer.Entity.Group.Group>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="text-center">
+    <p>
+        <a class="btn btn-outline-primary" asp-action="Create">ایجاد گروه جدید</a>
+        <a class="btn btn-outline-primary" asp-controller="UserGroups" asp-action="Index">مدیریت اعضای گروه ها</a>
+        <a class="btn btn-outline-primary" asp-controller="VoteGroups" asp-action="Index">مدیریت گروه های سوالات</a>
+    </p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.GroupTitle)
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GroupTitle)
+                </td>
+                <td>
+                    <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.GroupId">ویرایش</a> |
+                    <a class="btn btn-outline-primary" asp-controller="UserGroups" asp-action="AddUser" asp-route-groupId="@item.GroupId">افزودن عضو جدید</a> |
+
+                    @*<a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.GroupId">Details</a> |*@
+                    <a class="btn btn-outline-info" asp-controller="UserGroups" asp-action="GroupUsers" asp-route-groupId="@item.GroupId">مشاهده اعضا</a> |
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.GroupId">حذف</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+

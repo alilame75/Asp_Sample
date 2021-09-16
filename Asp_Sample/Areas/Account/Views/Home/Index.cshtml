@@ -1,0 +1,55 @@
+﻿@using Core.Utilities
+@using DataLayer.Entity.Vote
+
+@{
+    ViewData["Title"] = "Index";
+    var votes = ViewData["VoteList"] as List<Vote>;
+    var err = ViewData["Error"] as string;
+
+    var success = ViewData["Success"] as string;
+}
+
+
+<div class="text-center">
+
+    @if (!string.IsNullOrEmpty(err))
+    {
+<div class="alert alert-danger" role="alert">
+    @err
+</div>}
+    @if (!string.IsNullOrEmpty(success))
+    {
+<div class="alert alert-success" role="alert">
+    @success
+</div>}
+    <p class="text text-danger">شما فقط یکبار مجاز به شرکت در هر رای گیری می باشید و امکان تغییر رای پس از ثبت آن وجود ندارد.</p>
+    <table class="table table-striped">
+        @if (votes != null)
+        {
+<thead>
+    <tr>
+        <th scope="col">ردیف</th>
+        <th scope="col">نام</th>
+        <th scope="col">زمان انقضاء</th>
+        <th scope="col">رای دادن</th>
+    </tr>
+</thead>
+                <tbody>
+
+                    @foreach (var (item, index) in votes.WithIndex())
+                    {
+    <tr>
+        <th scope="row">@(index + 1)</th>
+        <td>@item.VoteName</td>
+        <td>@item.FinishTime</td>
+        <td><a asp-action="Vote" asp-route-id="@item.VoteId" type="button" class="btn btn-outline-primary">شرکت در رای گیری</a></td>
+    </tr>}
+                </tbody> }
+                            else
+                            {
+                <p>رای گیری فعالی وجود ندارد</p>}
+    </table>
+    <a type="button" class="btn btn-outline-secondary" asp-action="ChangePassword">تغییر پسورد</a>
+</div>
+
+

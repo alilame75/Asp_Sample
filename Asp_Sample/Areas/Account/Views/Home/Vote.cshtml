@@ -1,0 +1,35 @@
+﻿
+@model Asp_Sample.Areas.Account.Models.VoteAnswerDto
+
+@using DataLayer.Entity.Vote
+
+@{
+    ViewData["Title"] = "Vote";
+    var vote = ViewData["Vote"] as Vote;
+    var options = ViewData["VoteOptions"] as List<VoteAnswer>;
+}
+
+<h3>@vote.Question</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        @if (vote.UserHowManyCanVote > 1)
+        {
+            <p class="text-danger"> چنانچه انتخاب ها تکراری باشند ، موارد تکراری فقط یکبار شمارش خواهند شد.</p>
+        }
+        <p>توضیحات</p>
+        <p>@vote.VoteDescription</p>
+        <form asp-action="VoteAnswer" method="post">
+            <input type="hidden" value="@vote.VoteId" asp-for="VoteId" />
+            @for (int i = 0; i < vote.UserHowManyCanVote; i++)
+            {
+    <p>
+        گزینه مورد نظرتان را انتخاب کنید
+        <select asp-items="@(new SelectList(options,"VoteAnswerId","Option"))" asp-for="AnswerIds[i]">
+            <option value="@null">لطفا یک گزینه را انتخاب کنید</option>
+        </select>
+    </p>}
+            <input type="submit" class="btn btn-primary" value="ثبت" />
+        </form>
+    </div>
+</div>

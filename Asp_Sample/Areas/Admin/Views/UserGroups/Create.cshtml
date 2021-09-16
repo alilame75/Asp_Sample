@@ -1,0 +1,54 @@
+﻿@model DataLayer.Entity.Group.UserGroup
+
+@{
+    ViewData["Title"] = "Create";
+}
+@section Styles
+{
+    <link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
+    <!-- select2-bootstrap4-theme -->
+    <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet">
+}
+
+<h1>اضافه کردن کاربر</h1>
+
+<h4></h4>
+<hr />
+
+<div class="row ">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Group.GroupTitle" class="control-label"></label>
+                <select asp-for="GroupId" class="form-control" asp-items="ViewBag.GroupId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.UserName" class="control-label" ></label>
+                <select asp-for="UserId"  class="form-control" id="simpleSelect2" asp-items="ViewBag.UserId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div>
+    <a asp-controller="Groups" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/select2/js/select2.js"></script>
+    <script>
+        $("#simpleSelect2").select2({
+            placeholder: "Select a Static Value",
+            theme: "bootstrap4",
+            allowClear: false
+        });
+    </script>
+}

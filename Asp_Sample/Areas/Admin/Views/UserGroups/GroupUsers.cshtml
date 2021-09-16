@@ -1,0 +1,38 @@
+﻿@model IEnumerable<DataLayer.Entity.Group.UserGroup>
+@{
+    var groupName = ViewData["Name"] as string;
+    ViewData["Title"] = groupName;
+    var groupId = ViewData["GroupId"] is Guid ? (Guid) ViewData["GroupId"] : default;
+}
+
+<div class="text-center">
+    <h2>@groupName</h2>
+    <p>
+        <a class="btn btn-outline-primary" asp-controller="UserGroups" asp-action="AddUser" asp-route-groupId="@groupId">افزودن عضو جدید به این گروه</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="align-middle">
+                    نام کاربری
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+<tr>
+    <td class="align-middle">
+        @Html.DisplayFor(modelItem => item.User.UserName)
+    </td>
+    <td class="align-middle">
+        @*<a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.UserGroupId">ویرایش</a> |*@
+        @*<a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.UserGroupId">جزئیات</a> |*@
+        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.UserGroupId">حذف</a>
+    </td>
+</tr>}
+        </tbody>
+    </table>
+</div>
+
